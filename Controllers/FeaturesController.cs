@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace autobook.Controllers
 {
-    public class FeaturesController
+    public class FeaturesController :Controller
     {
         private readonly AppDbContext appDbContext;
 

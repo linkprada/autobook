@@ -47,6 +47,14 @@ namespace autobook.Models
                 new Feature{
                     Id = 1,
                     Name = "Feature1"
+                },
+                new Feature{
+                    Id = 2,
+                    Name = "Feature2"
+                },
+                new Feature{
+                    Id = 3,
+                    Name = "Feature3"
                 }
             );
         }

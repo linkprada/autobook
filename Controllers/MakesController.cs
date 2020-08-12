@@ -14,7 +14,7 @@ namespace autobook.Controllers
     {
         private readonly AppDbContext appDbContext;
         private readonly IMapper mapper;
-
+        
         public MakesController(AppDbContext appDbContext, IMapper mapper)
         {
             this.mapper = mapper;
