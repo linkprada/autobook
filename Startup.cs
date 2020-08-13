@@ -1,5 +1,7 @@
 using System;
-using autobook.Models;
+using autobook.Core;
+using autobook.Core.Models;
+using autobook.Persistance;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +26,9 @@ namespace autobook
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IVehiculeRepository,VehiculeRepository>();
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
+
             services.AddAutoMapper(typeof(Startup));
 
             services.AddDbContextPool<AppDbContext>(options =>

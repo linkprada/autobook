@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using autobook.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace autobook.Models
+namespace autobook.Persistance
 {
     public class AppDbContext : DbContext
     {

@@ -2,35 +2,37 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using autobook.Models;
-using autobook.Resources;
+using autobook.Core.Models;
+using autobook.Controllers.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using autobook.Core;
 
 namespace autobook.Controllers
 {
     public class VehiculesController : Controller
     {
-        private readonly AppDbContext appDbContext;
         private readonly IMapper mapper;
-        public VehiculesController(AppDbContext appDbContext, IMapper mapper)
+        private readonly IVehiculeRepository vehiculeRepository;
+        private readonly IUnitOfWork unitOfWork;
+        public VehiculesController(IMapper mapper, IVehiculeRepository vehiculeRepository, IUnitOfWork unitOfWork)
         {
+            this.unitOfWork = unitOfWork;
+            this.vehiculeRepository = vehiculeRepository;
             this.mapper = mapper;
-            this.appDbContext = appDbContext;
-
         }
 
         [HttpGet]
         public IActionResult GetAllVehicules()
         {
-            var vehiculesFound = appDbContext.Vehicules.Include(v => v.Features).ToList();
-            List <VehiculeResource> vehicule  = new List<VehiculeResource>();
+            var vehiculesFound = vehiculeRepository.GetAllVehiculesAsync();
+            List<VehiculeResource> vehicule = new List<VehiculeResource>();
             foreach (var vehiculeFound in vehiculesFound)
             {
-                vehicule.Add(mapper.Map<Vehicule,VehiculeResource>(vehiculeFound));
+                vehicule.Add(mapper.Map<Vehicule, VehiculeResource>(vehiculeFound));
             }
-            
+
             return Ok(vehicule);
         }
 
@@ -42,37 +44,39 @@ namespace autobook.Controllers
                 return BadRequest(ModelState);
             }
 
-            var vehiculeFound = await appDbContext.Vehicules.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+            var vehiculeFound = await vehiculeRepository.GetVehiculeAsync(id);
             if (vehiculeFound == null)
             {
-                return NotFound();                
+                return NotFound();
             }
 
-            var vehicule = mapper.Map<Vehicule,VehiculeResource>(vehiculeFound);
+            var vehicule = mapper.Map<Vehicule, VehiculeResource>(vehiculeFound);
             return Ok(vehicule);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateVehicule([FromBody] VehiculeResource vehiculeRessource)
+        public async Task<IActionResult> CreateVehicule([FromBody] SaveVehiculeResource vehiculeRessource)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var vehicule = mapper.Map<VehiculeResource,Vehicule>(vehiculeRessource);
+            var vehicule = mapper.Map<SaveVehiculeResource, Vehicule>(vehiculeRessource);
             vehicule.LastUpdate = DateTime.Now;
 
-            appDbContext.Vehicules.Add(vehicule);
-            await appDbContext.SaveChangesAsync();
+            vehiculeRepository.AddVehicule(vehicule);
+            await unitOfWork.CompleteAsync();
 
-            var result = mapper.Map<Vehicule,VehiculeResource>(vehicule);
+            vehicule = await vehiculeRepository.GetVehiculeAsync(vehicule.Id);
+
+            var result = mapper.Map<Vehicule, VehiculeResource>(vehicule);
 
             return Ok(result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateVehicule(int id , [FromBody] VehiculeResource vehiculeRessource)
+        public async Task<IActionResult> UpdateVehicule(int id, [FromBody] SaveVehiculeResource vehiculeRessource)
         {
             if (!ModelState.IsValid)
             {
@@ -80,39 +84,40 @@ namespace autobook.Controllers
             }
 
             // var vehiculeFound = await appDbContext.Vehicules.FindAsync(id);
-            var vehiculeFound = await appDbContext.Vehicules.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+            var vehiculeFound = await vehiculeRepository.GetVehiculeAsync(id);
             if (vehiculeFound == null)
             {
-                return NotFound();                
+                return NotFound();
             }
 
-            var vehicule = mapper.Map<VehiculeResource,Vehicule>(vehiculeRessource,vehiculeFound);
+            var vehicule = mapper.Map<SaveVehiculeResource, Vehicule>(vehiculeRessource, vehiculeFound);
             vehicule.LastUpdate = DateTime.Now;
 
-            appDbContext.Vehicules.Update(vehicule);
-            await appDbContext.SaveChangesAsync();
+            // vehiculeRepository.UpdateVehicule(vehicule);
+            await unitOfWork.CompleteAsync();
 
-            var result = mapper.Map<Vehicule,VehiculeResource>(vehicule);
+            vehicule = await vehiculeRepository.GetVehiculeAsync(vehicule.Id);
+            var result = mapper.Map<Vehicule, VehiculeResource>(vehicule);
 
             return Ok(result);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteVehicule(int id , [FromBody] VehiculeResource vehiculeRessource)
+        public async Task<IActionResult> DeleteVehicule(int id, [FromBody] SaveVehiculeResource vehiculeRessource)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var vehiculeFound = await appDbContext.Vehicules.FindAsync(id);
+            var vehiculeFound = await vehiculeRepository.GetVehiculeAsync(id, includeRelated: false);
             if (vehiculeFound == null)
             {
-                return NotFound();                
+                return NotFound();
             }
 
-            appDbContext.Vehicules.Remove(vehiculeFound);
-            await appDbContext.SaveChangesAsync();
+            vehiculeRepository.RemoveVehicule(vehiculeFound);
+            await unitOfWork.CompleteAsync();
 
             return Ok(id);
         }

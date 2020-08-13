@@ -4,19 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace autobook.Models
+namespace autobook.Controllers.Resources
 {
-    public class Make
+    public class KeyValuePairResource
     {
         public int Id { get; set; }
         [Required]
-        [MaxLength(255)]
         public string Name { get; set; }
-        public List<Model> Models { get; set; }
-
-        public Make()
-        {
-            Models = new List<Model>();
-        }
     }
 }

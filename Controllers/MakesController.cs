@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using autobook.Models;
-using autobook.Resources;
+using autobook.Core.Models;
+using autobook.Controllers.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using autobook.Persistance;
 
 namespace autobook.Controllers
 {

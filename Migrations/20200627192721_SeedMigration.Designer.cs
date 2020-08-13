@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using autobook.Models;
-
+using autobook.Core.Models;
+using autobook.Persistance;
 namespace autobook.Migrations
 {
     [DbContext(typeof(AppDbContext))]

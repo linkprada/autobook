@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace autobook.Resources
+namespace autobook.Controllers.Resources
 {
-    public class VehiculeResource 
+    public class SaveVehiculeResource 
     {
         public int Id { get; set; }
         public int ModelId { get; set; }

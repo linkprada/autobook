@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace autobook.Models
+namespace autobook.Core.Models
 {
     public static class ModelBuilderExtentions
     {

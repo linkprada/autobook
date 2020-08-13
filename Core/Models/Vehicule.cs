@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace autobook.Models
+namespace autobook.Core.Models
 {
     public class Vehicule
     {

@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace autobook.Resources
+namespace autobook.Controllers.Resources
 {
     public class ContactResource
     {
