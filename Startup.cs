@@ -26,6 +26,12 @@ namespace autobook
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // solving issue with .NET CORE 3.X the serialize/deserialize done using System.Text.Json 
+            // which doesn’t deserialize non-string values like Int, Boolean and other primitives into string properties. 
+            // Any non-string value conversion produce JsonException
+            
+            services.AddControllers().AddNewtonsoftJson();
+
             services.AddScoped<IVehiculeRepository,VehiculeRepository>();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
 

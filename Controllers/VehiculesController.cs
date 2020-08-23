@@ -24,16 +24,11 @@ namespace autobook.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllVehicules()
+        public async Task<QueryResultResource<VehiculeResource>> GetAllVehiculesAsync(VehiculeQueryResource filterResource)
         {
-            var vehiculesFound = vehiculeRepository.GetAllVehiculesAsync();
-            List<VehiculeResource> vehicule = new List<VehiculeResource>();
-            foreach (var vehiculeFound in vehiculesFound)
-            {
-                vehicule.Add(mapper.Map<Vehicule, VehiculeResource>(vehiculeFound));
-            }
-
-            return Ok(vehicule);
+            var filter = mapper.Map<VehiculeQueryResource,VehiculeQuery>(filterResource);
+            var queryResult = await vehiculeRepository.GetAllVehiculesAsync(filter);
+            return mapper.Map<QueryResult<Vehicule>,QueryResultResource<VehiculeResource>>(queryResult);
         }
 
         [HttpGet]
@@ -75,7 +70,7 @@ namespace autobook.Controllers
             return Ok(result);
         }
 
-        [HttpPut]
+        [HttpPatch]
         public async Task<IActionResult> UpdateVehicule(int id, [FromBody] SaveVehiculeResource vehiculeRessource)
         {
             if (!ModelState.IsValid)
@@ -103,7 +98,7 @@ namespace autobook.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteVehicule(int id, [FromBody] SaveVehiculeResource vehiculeRessource)
+        public async Task<IActionResult> DeleteVehicule(int id)
         {
             if (!ModelState.IsValid)
             {

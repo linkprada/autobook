@@ -1,0 +1,53 @@
+<div>
+    <h1>Vehicules</h1>
+    <button class="btn btn-primary" [routerLink]="['/vehicules/new']">
+        New Vehicule 
+    </button>
+</div>
+<div class="card">
+    <div class="form-group">
+        <label for="make">Make</label>
+        <select class="form-control" id="make" [(ngModel)]="query.makeId" (change)="onFilterChange()">
+            <option value=""></option>
+            <option *ngFor="let make of makes" value="{{make.id}}">
+                {{make.name}}
+            </option>
+        </select>
+    </div>
+    <button class="btn btn-danger" (click)="resetFilter()">
+        Reset
+    </button>
+</div>
+<div>
+    <table class="table table-striped table-responsive-sm table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" *ngFor="let column of columns" >
+                    <div *ngIf="column.isSortable" (click)="sortBy(column.key)">
+                        {{column.title}}
+                        <i *ngIf="query.sortBy === column.key" 
+                            class="fa" 
+                            [class.fa-sort-asc]="query.isSortAscending"
+                            [class.fa-sort-desc]="!query.isSortAscending"
+                        ></i>
+                    </div>
+                    <div *ngIf="!column.isSortable">
+                        {{column.title}}
+                    </div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let vehicule of queryResult.items">
+                    <td scope="row">{{vehicule.id}}</td>
+                    <td>{{vehicule.make.name}}</td>
+                    <td>{{vehicule.model.name}}</td>
+                    <td>{{vehicule.contact.name}}</td>
+                    <td>
+                        <a [routerLink]="['/vehicules/', vehicule.id]">View</a>
+                    </td>
+                </tr>
+            </tbody>
+    </table>
+</div>
+<app-pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChange($event)"></app-pagination>

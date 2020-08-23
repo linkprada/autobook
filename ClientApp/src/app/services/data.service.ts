@@ -13,22 +13,6 @@ export class DataService {
 
   }
 
-  getAll(){
-    return this.http.get<any[]>(this.url).pipe(catchError(this.handleError))
-  }
-
-  create(resource){
-    return this.http.post(this.url,resource).pipe(catchError(this.handleError))
-  }
-
-  update(resource){
-    return this.http.patch(this.url + "/" + resource.id, {isRead : true}).pipe(catchError(this.handleError))
-  }
-
-  delete(id){
-    return this.http.delete(this.url + "/" + id).pipe(catchError(this.handleError))
-  }
-  
   private handleError(error : Response) {
     switch (error.status) {
       case 400:
@@ -37,11 +21,42 @@ export class DataService {
       case 404:
         return throwError(new NotFoundError())
         break;
-    
       default:
         return throwError(new AppError(error))
         break;
     }
+  }
+
+  getAll(filters?){
+    return this.http.get<any[]>(this.url + "?" + this.toQueryString(filters)).pipe(catchError(this.handleError))
+  }
+
+  get(id){
+    return this.http.get(this.url + "/" + id).pipe(catchError(this.handleError))
+  }
+
+  create(resource){
+    return this.http.post(this.url,resource).pipe().pipe(catchError(this.handleError))
+  }
+
+  update(resource){
+    return this.http.patch(this.url + "/" + resource.id, resource).pipe(catchError(this.handleError))
+  }
+
+  delete(id){
+    return this.http.delete(this.url + "/" + id).pipe(catchError(this.handleError))
+  }
+
+  // extract to a class and refactor if needed
+  toQueryString(obj){
+    let parts = [] ;
+    for(let property in obj){
+      let value = obj[property] ;
+      if (value != null && value != undefined) {
+        parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));
+      }
+    }
+    return parts.join('&');
   }
 
 }

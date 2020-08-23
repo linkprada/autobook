@@ -8,7 +8,7 @@ namespace autobook.Core
 {
     public interface IVehiculeRepository
     {
-        List<Vehicule> GetAllVehiculesAsync(bool includeRelated = true);
+        Task<QueryResult<Vehicule>> GetAllVehiculesAsync(VehiculeQuery queryObj,bool includeRelated = true);
         Task<Vehicule> GetVehiculeAsync(int id , bool includeRelated = true);
         void AddVehicule(Vehicule vehicule);
         // void UpdateVehicule(Vehicule vehicule);

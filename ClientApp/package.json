@@ -11,7 +11,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~9.1.11",
+    "@angular/animations": "^9.1.12",
     "@angular/common": "~9.1.11",
     "@angular/compiler": "~9.1.11",
     "@angular/core": "~9.1.11",
@@ -19,10 +19,18 @@
     "@angular/platform-browser": "~9.1.11",
     "@angular/platform-browser-dynamic": "~9.1.11",
     "@angular/router": "~9.1.11",
+    "@sentry/browser": "^5.21.1",
+    "@types/jquery": "^3.5.1",
+    "@types/underscore": "^1.10.22",
     "bootstrap": "^4.5.1",
     "font-awesome": "^4.7.0",
+    "jquery": "^3.5.1",
+    "ngx-toastr": "^13.0.0",
+    "popper": "^1.0.1",
     "rxjs": "~6.5.4",
+    "sentry": "^0.1.2",
     "tslib": "^1.10.0",
+    "underscore": "^1.10.2",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

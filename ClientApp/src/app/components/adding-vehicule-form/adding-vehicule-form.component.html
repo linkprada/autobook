@@ -1,0 +1,99 @@
+<form (ngSubmit)="submit()" #addingVehiculeForm="ngForm" novalidate>
+  <div>
+    <p>
+      {{vehicule | json}}
+    </p>
+    <h1>New Vehicule</h1>
+    <div class="form-group">
+      <label for="makeId">Make</label>
+      <select class="form-control form-control-sm" name="makeId" id="makeId" 
+              (change)="onMakeChange()" [(ngModel)]="vehicule.makeId" required #make="ngModel">
+        <option value=""></option>
+        <option *ngFor="let make of makes" value="{{make.id}}">
+            {{make.name}}
+        </option>
+      </select>
+      <div class="alert alert-danger" *ngIf="make.touched && make.invalid">
+        please specify the make
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="model">Model</label>
+      <select class="form-control form-control-sm" name="modelId" id="modelId" 
+              [(ngModel)]="vehicule.modelId" required #model="ngModel">
+        <option value=""></option>
+        <option *ngFor="let model of models" value="{{model.id}}">
+            {{model.name}}
+        </option>
+      </select>
+      <div class="alert alert-danger" *ngIf="model.touched && model.invalid">
+        please specify the model
+      </div>
+    </div>
+    
+    <p>Is this vehicle registered ? </p>
+    <div class="form-check form-check-inline">
+      <label for="registred" class="form-check-label">
+          <input class="form-check-input" type="radio" name="isRegistred" id="registred" [value]="true" 
+                  [(ngModel)]="vehicule.isRegistred"> 
+          Yes
+      </label>
+    </div>
+    <div class="form-check form-check-inline">
+      <label for="notRegistred" class="form-check-label">
+          <input class="form-check-input" type="radio" name="isRegistred" id="notRegistred" [value]="false" 
+                  [(ngModel)]="vehicule.isRegistred"> 
+          No
+      </label>
+    </div>
+
+    <h1>Features</h1>
+    <div *ngFor="let feature of features" class="form-check">
+      <label for="feature{{feature.id}}" class="form-check-label">
+        <input type="checkbox" class="form-check-input" name="feature{{feature.id}}" id="feature{{feature.id}}" [checked]="vehicule.features.includes(feature.id)"
+              (change)="onFeatureToggle(feature,$event)">
+        {{feature.name}}
+      </label>
+    </div>
+    
+    <h1>Contact</h1>
+    <div class="form-group">
+      <label for="contactName">Name</label>
+      <input type="text" class="form-control" name="contactName" id="contactName" aria-describedby="helpName" 
+              placeholder="Name" [(ngModel)]="vehicule.contact.name" required #name="ngModel">
+      <small id="helpName" class="form-text text-muted">insert your name</small>
+      <div class="alert alert-danger" *ngIf="name.touched && name.invalid">
+        Contact Name is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="contactEmail">Email</label>
+      <input type="text" class="form-control" name="contactEmail" id="contactEmail" aria-describedby="helpEmail" 
+              placeholder="Email" [(ngModel)]="vehicule.contact.email" required #email="ngModel">
+      <small id="helpEmail" class="form-text text-muted">insert your email</small>
+      <div class="alert alert-danger" *ngIf="email.touched && email.invalid">
+        Contact Email is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="contactPhone">Phone</label>
+      <input type="text" class="form-control" name="contactPhone" id="contactPhone" aria-describedby="helpPhone" 
+              placeholder="Phone" [(ngModel)]="vehicule.contact.phone" required #phone="ngModel">
+      <small id="helpPhone" class="form-text text-muted">insert your phone number</small>
+      <div class="alert alert-danger" *ngIf="phone.touched && phone.invalid">
+        Contact Phone is required
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="addingVehiculeForm.invalid" class="btn btn-primary">
+      Save
+    </button>
+    <button *ngIf="vehicule.id" type="button" class="btn btn-danger" (click)="delete()">
+      Delete
+    </button>
+  </div>
+</form>
+
