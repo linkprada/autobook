@@ -24,5 +24,12 @@ namespace autobook.Core.Models
         public String ContactPhone { get; set; }
         public DateTime LastUpdate { get; set; }
         public List<VehiculeFeature> Features { get; set; }
+        public List<Photo> Photos { get; set; }
+
+         public Vehicule()
+        {
+            Features = new List<VehiculeFeature>();
+            Photos = new List<Photo>();
+        }
     }
 }

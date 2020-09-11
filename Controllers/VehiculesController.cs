@@ -8,9 +8,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using autobook.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace autobook.Controllers
 {
+    [Route("/api/Vehicules")]
     public class VehiculesController : Controller
     {
         private readonly IMapper mapper;
@@ -31,7 +33,7 @@ namespace autobook.Controllers
             return mapper.Map<QueryResult<Vehicule>,QueryResultResource<VehiculeResource>>(queryResult);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetVehiculeAsync(int id)
         {
             if (!ModelState.IsValid)
@@ -50,6 +52,7 @@ namespace autobook.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateVehicule([FromBody] SaveVehiculeResource vehiculeRessource)
         {
             if (!ModelState.IsValid)
@@ -71,6 +74,7 @@ namespace autobook.Controllers
         }
 
         [HttpPatch]
+        [Authorize]
         public async Task<IActionResult> UpdateVehicule(int id, [FromBody] SaveVehiculeResource vehiculeRessource)
         {
             if (!ModelState.IsValid)
@@ -98,6 +102,7 @@ namespace autobook.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public async Task<IActionResult> DeleteVehicule(int id)
         {
             if (!ModelState.IsValid)

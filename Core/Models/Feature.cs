@@ -12,5 +12,10 @@ namespace autobook.Core.Models
         [Required]
         public string Name { get; set; }
         public List<VehiculeFeature> Vehicules { get; set; }
+
+        public Feature()
+        {
+            Vehicules = new List<VehiculeFeature>();
+        }
     }
 }

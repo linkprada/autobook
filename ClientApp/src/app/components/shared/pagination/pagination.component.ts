@@ -7,9 +7,9 @@ import { OnChanges } from '@angular/core';
   styleUrls: ['./pagination.component.css']
 })
 export class PaginationComponent implements OnChanges {
-  @Input('total-items') totalItems;
+	@Input('total-items') totalItems;
 	@Input('page-size') pageSize = 10;
-  @Output('page-changed') pageChanged = new EventEmitter();
+	@Output('page-changed') pageChanged = new EventEmitter();
   
 	pages: any[];
 	currentPage = 1; 
@@ -21,8 +21,6 @@ export class PaginationComponent implements OnChanges {
 		this.pages = [];
 		for (var i = 1; i <= pagesCount; i++)
 			this.pages.push(i);
-
-    console.log(this);
 	}
 
 	changePage(page){
@@ -43,7 +41,6 @@ export class PaginationComponent implements OnChanges {
 			return; 
 		
 		this.currentPage++;
-    console.log("next", this);
 		this.pageChanged.emit(this.currentPage);
 	}
 }

@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using autobook.Core.Models;
 using autobook.Persistance;
 
 namespace autobook.Migrations
@@ -20,7 +19,7 @@ namespace autobook.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("autobook.Models.Feature", b =>
+            modelBuilder.Entity("autobook.Core.Models.Feature", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,7 +52,7 @@ namespace autobook.Migrations
                         });
                 });
 
-            modelBuilder.Entity("autobook.Models.Make", b =>
+            modelBuilder.Entity("autobook.Core.Models.Make", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -87,7 +86,7 @@ namespace autobook.Migrations
                         });
                 });
 
-            modelBuilder.Entity("autobook.Models.Model", b =>
+            modelBuilder.Entity("autobook.Core.Models.Model", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -129,7 +128,29 @@ namespace autobook.Migrations
                         });
                 });
 
-            modelBuilder.Entity("autobook.Models.Vehicule", b =>
+            modelBuilder.Entity("autobook.Core.Models.Photo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<int?>("VehiculeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VehiculeId");
+
+                    b.ToTable("Photos");
+                });
+
+            modelBuilder.Entity("autobook.Core.Models.Vehicule", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -166,7 +187,7 @@ namespace autobook.Migrations
                     b.ToTable("Vehicules");
                 });
 
-            modelBuilder.Entity("autobook.Models.VehiculeFeature", b =>
+            modelBuilder.Entity("autobook.Core.Models.VehiculeFeature", b =>
                 {
                     b.Property<int>("VehiculeId")
                         .HasColumnType("int");
@@ -181,33 +202,40 @@ namespace autobook.Migrations
                     b.ToTable("VehiculeFeatures");
                 });
 
-            modelBuilder.Entity("autobook.Models.Model", b =>
+            modelBuilder.Entity("autobook.Core.Models.Model", b =>
                 {
-                    b.HasOne("autobook.Models.Make", "Make")
+                    b.HasOne("autobook.Core.Models.Make", "Make")
                         .WithMany("Models")
                         .HasForeignKey("MakeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("autobook.Models.Vehicule", b =>
+            modelBuilder.Entity("autobook.Core.Models.Photo", b =>
                 {
-                    b.HasOne("autobook.Models.Model", "Model")
+                    b.HasOne("autobook.Core.Models.Vehicule", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("VehiculeId");
+                });
+
+            modelBuilder.Entity("autobook.Core.Models.Vehicule", b =>
+                {
+                    b.HasOne("autobook.Core.Models.Model", "Model")
                         .WithMany()
                         .HasForeignKey("ModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("autobook.Models.VehiculeFeature", b =>
+            modelBuilder.Entity("autobook.Core.Models.VehiculeFeature", b =>
                 {
-                    b.HasOne("autobook.Models.Feature", "Feature")
+                    b.HasOne("autobook.Core.Models.Feature", "Feature")
                         .WithMany("Vehicules")
                         .HasForeignKey("FeatureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("autobook.Models.Vehicule", "Vehicule")
+                    b.HasOne("autobook.Core.Models.Vehicule", "Vehicule")
                         .WithMany("Features")
                         .HasForeignKey("VehiculeId")
                         .OnDelete(DeleteBehavior.Cascade)

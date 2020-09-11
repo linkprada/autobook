@@ -1,16 +1,13 @@
-import { DeletingVehiculeService } from './../../services/deleting-vehicule.service';
+import { VehiculeService } from './../../services/vehicule.service';
 import { NotificationService } from './../../services/notification.service';
-import { EditVehiculeService } from './../../services/edit-vehicule.service';
 import { SaveVehicule } from './../../models/SaveVehicule';
 import { Vehicule } from './../../models/Vehicule';
 
-import { Component, OnInit, NgZone } from '@angular/core';
-import { ActivatedRoute, Router, ActivationEnd } from '@angular/router';
+import { Component, OnInit} from '@angular/core';
+import { ActivatedRoute, Router} from '@angular/router';
 
 import { MakeService } from 'src/app/services/make.service';
 import { FeatureService } from 'src/app/services/feature.service';
-import { AddingVehiculeService } from 'src/app/services/adding-vehicule.service';
-import { UpdatingVehiculeService } from 'src/app/services/updating-vehicule.service';
 
 import { forkJoin, Observable } from 'rxjs';
 
@@ -40,16 +37,14 @@ export class AddingVehiculeFormComponent implements OnInit {
   features : any [];
 
   constructor(private makeService : MakeService , private featureService : FeatureService ,private route : ActivatedRoute , 
-              private router : Router, private addingVehiculeService: AddingVehiculeService , private updatingVehiculeService :UpdatingVehiculeService , 
-              private editVehiculeService : EditVehiculeService , private deletingVehiculeService : DeletingVehiculeService ,
-              private notificationService: NotificationService) {
+              private router : Router, private notificationService: NotificationService , private vehiculeService : VehiculeService) {
                 
   }
 
   ngOnInit(): void {
 
-    this.route.params.subscribe((params) => {
-      this.vehicule.id = Number(params['id']);
+    this.route.params.subscribe(params => {
+      this.vehicule.id = Number(params['id']) || 0;
     });   
 
     let sources : Observable<any>[] = [
@@ -58,14 +53,14 @@ export class AddingVehiculeFormComponent implements OnInit {
     ]
 
     if (this.vehicule.id) {
-      sources.push(this.editVehiculeService.get(this.vehicule.id));
+      sources.push(this.vehiculeService.get(this.vehicule.id));
     }
 
     forkJoin(sources).subscribe(data =>{
       this.makes = data[0] ;
       this.features = data[1];
       if (this.vehicule.id) {
-        this.setVehicule(data[2])
+        this.setVehicule(data[2]);
         this.populateModels();
       }
       
@@ -102,25 +97,14 @@ export class AddingVehiculeFormComponent implements OnInit {
   }
 
   submit (){
-    if (this.vehicule.id) {
-      this.updatingVehiculeService.update(this.vehicule).subscribe(
-      x =>{
-        this.notificationService.showSuccess("The vehicule was successfully updated","Success")
-      })
-    }
-    else{
-      this.addingVehiculeService.create(this.vehicule).subscribe(
-        x => {
-          console.log(x);
-        }
-      );
-    }
-  }
+    let result$ = (this.vehicule.id) ? this.vehiculeService.update(this.vehicule) : this.vehiculeService.create(this.vehicule) ;
 
-  delete(){
-    if (confirm("Are you sure?")) {
-      this.deletingVehiculeService.delete(this.vehicule.id).subscribe()
-    }
+    result$.subscribe((vehicule:Vehicule) =>{
+      this.notificationService.showSuccess("Date saved successfully","Success"),
+      this.router.navigate(['/vehicules/',vehicule.id]);
+    });
+
+    
   }
 
 }

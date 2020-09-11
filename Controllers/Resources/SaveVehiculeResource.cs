@@ -14,5 +14,10 @@ namespace autobook.Controllers.Resources
         [Required]
         public ContactResource Contact { get; set; }
         public List<int> Features { get; set; }
+
+        public SaveVehiculeResource()
+        {
+            Features = new List<int>();
+        }
     }
 }

@@ -1,8 +1,9 @@
+import { AuthService } from './../../services/auth.service';
 import { MakeService } from './../../services/make.service';
 import { KeyValuePair } from './../../models/KeyValuePair';
-import { GetAllVehiculeService } from './../../services/get-all-vehicule.service';
 import { Vehicule } from './../../models/Vehicule';
 import { Component, OnInit } from '@angular/core';
+import { VehiculeService } from 'src/app/services/vehicule.service';
 
 @Component({
   selector: 'app-vehicule-list',
@@ -27,10 +28,10 @@ export class VehiculeListComponent implements OnInit {
     {title:"Make" , key:"make" , isSortable:true},
     {title:"Model" , key:"model" , isSortable:true},
     {title:"Contact Name" , key:"contactName" , isSortable:true},
-    {/*view column*/}
+    {/*the column "view"*/}
   ]
 
-  constructor(private getAllVehiculeService : GetAllVehiculeService , private makeService : MakeService) {
+  constructor(private vehiculeService : VehiculeService , private makeService : MakeService ,public authService : AuthService) {
 
   }
 
@@ -40,7 +41,7 @@ export class VehiculeListComponent implements OnInit {
   }
 
   populateVehicules(){
-    this.getAllVehiculeService.getAll(this.query).subscribe(vehicules => this.queryResult = this.allVehicules = vehicules)
+    this.vehiculeService.getAll(this.query).subscribe(vehicules => this.queryResult = this.allVehicules = vehicules)
   }
 
   //filtering on server side

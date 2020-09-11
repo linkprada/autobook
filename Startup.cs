@@ -1,8 +1,10 @@
 using System;
+using autobook.Controllers;
 using autobook.Core;
 using autobook.Core.Models;
 using autobook.Persistance;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,11 +31,16 @@ namespace autobook
             // solving issue with .NET CORE 3.X the serialize/deserialize done using System.Text.Json 
             // which doesn’t deserialize non-string values like Int, Boolean and other primitives into string properties. 
             // Any non-string value conversion produce JsonException
-            
             services.AddControllers().AddNewtonsoftJson();
 
+            services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
+
+            services.AddScoped<IPhotoRepository,PhotoRepository>();
             services.AddScoped<IVehiculeRepository,VehiculeRepository>();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
+            services.AddTransient<IPhotoService,PhotoService>();
+            services.AddTransient<IPhotoStorage,FileSystemPhotoStorage>();
+
 
             services.AddAutoMapper(typeof(Startup));
 
@@ -43,6 +50,18 @@ namespace autobook
             });
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://autobook.eu.auth0.com/";
+                options.Audience = "https://api.autobook.com";
+            });
+
+            services.AddAuthorization(options => options.AddPolicy(AppPolicies.RequiredAdminRole,policy => policy.RequireClaim("https://autobook.com/roles","Admin")));
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -78,6 +97,8 @@ namespace autobook
             app.UseSpaStaticFiles();
 
             app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

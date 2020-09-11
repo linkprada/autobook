@@ -5,9 +5,9 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class DeletingVehiculeService extends DataService{
+export class VehiculeService extends DataService {
 
   constructor(http : HttpClient) { 
-    super(http , "/Vehicules/DeleteVehicule");
+    super(http , "/api/Vehicules");
   }
 }

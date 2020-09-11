@@ -4,6 +4,7 @@ using autobook.Controllers.Resources;
 using autobook.Core.Models;
 using autobook.Persistance;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace autobook.Controllers

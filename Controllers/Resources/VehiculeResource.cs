@@ -15,5 +15,10 @@ namespace autobook.Controllers.Resources
         public ContactResource Contact { get; set; }
         public DateTime LastUpdate { get; set; }
         public List<KeyValuePairResource> Features { get; set; }
+
+        public VehiculeResource()
+        {
+            Features = new List<KeyValuePairResource>();
+        }   
     }
 }

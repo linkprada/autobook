@@ -13,10 +13,11 @@ namespace autobook.Core.Models
         [MaxLength(255)]
         public string Name { get; set; }
         public List<Model> Models { get; set; }
-
+        
         public Make()
         {
             Models = new List<Model>();
         }
+
     }
 }

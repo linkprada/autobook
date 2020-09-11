@@ -41,20 +41,15 @@ namespace autobook.Persistance
                 return result ;
             }
 
-            var query = appDbContext.Vehicules.Include(v => v.Features).ThenInclude(vf => vf.Feature)
-                .Include(v => v.Model).ThenInclude(m => m.Make).AsQueryable();
+            var query = appDbContext.Vehicules.Include(v => v.Model).ThenInclude(m => m.Make).AsQueryable();
 
-            if (querryObj.MakeId.HasValue)
-            {
-                query = query.Where(v => v.Model.MakeId == querryObj.MakeId);
-            }
+            query = query.ApplyFiltering(querryObj);
 
             var columnsMap = new Dictionary<string,Expression<Func<Vehicule,object>>>{
                 ["make"] = v => v.Model.Make.Name,
                 ["model"] = v => v.Model.Name,
                 ["contactName"] = v => v.ContactName,
             } ;
-
             query = query.ApplyOrdering(querryObj,columnsMap);
             
             result.TotalItems = await query.CountAsync();
