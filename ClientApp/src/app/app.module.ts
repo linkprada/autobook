@@ -43,7 +43,6 @@ import { NgxChartsModule }from '@swimlane/ngx-charts';
     HttpClientModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    BrowserAnimationsModule,
     NgxChartsModule
   ],
   providers: [
