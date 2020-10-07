@@ -74,8 +74,8 @@ namespace autobook.Controllers
             return Ok(result);
         }
 
-        [HttpPatch]
-        [Authorize]
+        [HttpPatch("{id}")]
+        // [Authorize]
         public async Task<IActionResult> UpdateVehicule(int id, [FromBody] SaveVehiculeResource vehiculeRessource)
         {
             if (!ModelState.IsValid)
