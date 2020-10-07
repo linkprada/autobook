@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace autobook.Controllers
 {
     [Route("/api/Vehicules")]
+    
     public class VehiculesController : Controller
     {
         private readonly IMapper mapper;

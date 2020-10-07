@@ -49,19 +49,20 @@ namespace autobook
                 options.UseSqlServer(Configuration.GetConnectionString("AutoBookDbConnection"));
             });
 
+            // services.AddAuthentication(options =>
+            // {
+            //     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            // }).AddJwtBearer(options =>
+            // {
+            //     options.Authority = "https://autobook.eu.auth0.com/";
+            //     options.Audience = "https://api.autobook.com";
+            // });
+
+            // services.AddAuthorization(options => options.AddPolicy(AppPolicies.RequiredAdminRole,policy => policy.RequireClaim("https://autobook.com/roles","Admin")));
+
+
             services.AddMvc(options => options.EnableEndpointRouting = false);
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
-                options.Authority = "https://autobook.eu.auth0.com/";
-                options.Audience = "https://api.autobook.com";
-            });
-
-            services.AddAuthorization(options => options.AddPolicy(AppPolicies.RequiredAdminRole,policy => policy.RequireClaim("https://autobook.com/roles","Admin")));
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
