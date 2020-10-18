@@ -102,7 +102,7 @@ namespace autobook.Controllers
             return Ok(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteVehicule(int id)
         {
